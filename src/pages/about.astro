@@ -1,0 +1,105 @@
+---
+import Layout from '@/layouts/MainLayout.astro'
+---
+
+<Layout title="About - Astro Authentication Demo">
+  <div class="max-w-4xl mx-auto px-4 py-12">
+    <!-- ヘッダーセクション -->
+    <section class="mb-12">
+      <h1 class="text-4xl font-bold text-gray-900 mb-4">About This Project</h1>
+      <p class="text-lg text-gray-600 leading-relaxed">
+        Astroベースのユーザー認証機能デモプロジェクトです。PostgreSQLとRedisを使用した
+        セッション管理、ユーザー認証、メモ管理機能を実装しています。
+        モダンなフロントエンドスタック（React + Tailwind CSS）と
+        バックエンド機能を統合したフルスタックアプリケーションサンプルです。
+      </p>
+    </section>
+
+    <!-- 主な機能セクション -->
+    <section class="mb-12">
+      <h2 class="text-2xl font-bold text-gray-900 mb-6">主な機能</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div
+          class="border border-gray-200 rounded-lg p-6 bg-white shadow-sm hover:shadow-md transition-shadow"
+        >
+          <h3 class="text-lg font-semibold text-gray-900 mb-2">ユーザー認証</h3>
+          <p class="text-gray-600">
+            ログイン・ログアウト機能とセッション管理を実装。
+            安全なパスワード保存とRedisベースのセッション管理。
+          </p>
+        </div>
+        <div
+          class="border border-gray-200 rounded-lg p-6 bg-white shadow-sm hover:shadow-md transition-shadow"
+        >
+          <h3 class="text-lg font-semibold text-gray-900 mb-2">メモ管理</h3>
+          <p class="text-gray-600">
+            ユーザーごとのメモ作成・編集・削除機能。 PostgreSQL上でデータ永続化。
+          </p>
+        </div>
+        <div
+          class="border border-gray-200 rounded-lg p-6 bg-white shadow-sm hover:shadow-md transition-shadow"
+        >
+          <h3 class="text-lg font-semibold text-gray-900 mb-2">保護されたページ</h3>
+          <p class="text-gray-600">
+            認証されたユーザーのみアクセス可能なページ。 ミドルウェアによる自動リダイレクト。
+          </p>
+        </div>
+        <div
+          class="border border-gray-200 rounded-lg p-6 bg-white shadow-sm hover:shadow-md transition-shadow"
+        >
+          <h3 class="text-lg font-semibold text-gray-900 mb-2">REST API</h3>
+          <p class="text-gray-600">完全なREST API実装。ノートとユーザー認証のエンドポイント。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 技術スタックセクション -->
+    <section class="mb-12">
+      <h2 class="text-2xl font-bold text-gray-900 mb-6">技術スタック</h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="bg-blue-50 border border-blue-200 rounded-lg p-6">
+          <h3 class="text-lg font-semibold text-blue-900 mb-3">フロントエンド</h3>
+          <ul class="text-blue-700 space-y-2 text-sm">
+            <li>• Astro 6.4</li>
+            <li>• React 19</li>
+            <li>• Tailwind CSS 3</li>
+            <li>• Flowbite</li>
+          </ul>
+        </div>
+        <div class="bg-green-50 border border-green-200 rounded-lg p-6">
+          <h3 class="text-lg font-semibold text-green-900 mb-3">バックエンド</h3>
+          <ul class="text-green-700 space-y-2 text-sm">
+            <li>• Node.js</li>
+            <li>• Prisma ORM</li>
+            <li>• PostgreSQL</li>
+            <li>• Redis</li>
+          </ul>
+        </div>
+        <div class="bg-purple-50 border border-purple-200 rounded-lg p-6">
+          <h3 class="text-lg font-semibold text-purple-900 mb-3">ツール & ライブラリ</h3>
+          <ul class="text-purple-700 space-y-2 text-sm">
+            <li>• TypeScript</li>
+            <li>• pnpm</li>
+            <li>• Prettier</li>
+            <li>• ESLint</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- プロジェクト情報セクション -->
+    <section class="bg-gray-50 border border-gray-200 rounded-lg p-8">
+      <h2 class="text-xl font-bold text-gray-900 mb-4">プロジェクト情報</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+          <p class="text-sm text-gray-600 mb-1">バージョン</p>
+          <p class="text-lg font-semibold text-gray-900">1.0.0</p>
+        </div>
+        <div>
+          <p class="text-sm text-gray-600 mb-1">タイプ</p>
+          <p class="text-lg font-semibold text-gray-900">デモ・サンプルプロジェクト</p>
+        </div>
+      </div>
+    </section>
+  </div>
+</Layout>

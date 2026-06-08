@@ -1,0 +1,10 @@
+---
+import Layout from '@/layouts/MainLayout.astro'
+
+// Component Imports
+import NoteList from '@/components/NoteList.jsx'
+---
+
+<Layout title="Memo - トップ">
+  <NoteList client:load />
+</Layout>
