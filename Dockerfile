@@ -72,12 +72,14 @@ RUN chmod +x entrypoint.sh
 # 非rootユーザーに切り替え
 USER nodejs
 
-# ポート3000を公開
+# デフォルトポート（実行時は PORT 環境変数で上書き可能。Astro スタンドアロンサーバも PORT を参照）
+ENV PORT=3000
+
 EXPOSE 3000
 
-# ヘルスチェック（オプション）
+# ヘルスチェック（$$ はビルド時に $ へ展開され、実行時に PORT 環境変数を参照）
 HEALTHCHECK --interval=30s --timeout=3s --start-period=40s --retries=3 \
-    CMD curl -sf -o /dev/null http://localhost:3000/ || exit 1
+    CMD curl -sf -o /dev/null "http://localhost:$${PORT:-3000}/" || exit 1
 
 # 起動スクリプトを実行
 ENTRYPOINT ["./entrypoint.sh"]
