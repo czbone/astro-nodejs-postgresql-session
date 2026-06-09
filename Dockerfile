@@ -66,20 +66,18 @@ COPY --chown=nodejs:nodejs prisma ./prisma
 COPY --chown=nodejs:nodejs prisma.config.ts ./
 
 # 起動スクリプトをコピー
-COPY --chown=nodejs:nodejs entrypoint.sh ./
-RUN chmod +x entrypoint.sh
+COPY --chown=nodejs:nodejs entrypoint.sh healthcheck.sh ./
+RUN chmod +x entrypoint.sh healthcheck.sh
 
 # 非rootユーザーに切り替え
 USER nodejs
 
-# デフォルトポート（実行時は PORT 環境変数で上書き可能。Astro スタンドアロンサーバも PORT を参照）
-ENV PORT=3000
+# 待ち受けポートは Coolify の Ports Exposes で指定（PORT 環境変数として注入される）
+# NOTE: EXPOSE / ENV PORT は Dockerfile に書かない（Coolify 設定と競合し docker ps が 3000-3001 になる）
 
-EXPOSE 3000
-
-# ヘルスチェック（$$ はビルド時に $ へ展開され、実行時に PORT 環境変数を参照）
-HEALTHCHECK --interval=30s --timeout=3s --start-period=40s --retries=3 \
-    CMD curl -sf -o /dev/null "http://localhost:$${PORT:-3000}/" || exit 1
+# ヘルスチェック（healthcheck.sh が実行時の PORT を参照）
+HEALTHCHECK --interval=30s --timeout=3s --start-period=90s --retries=3 \
+    CMD ./healthcheck.sh
 
 # 起動スクリプトを実行
 ENTRYPOINT ["./entrypoint.sh"]
