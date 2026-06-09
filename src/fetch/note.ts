@@ -1,7 +1,9 @@
+import { API_BASE } from '@/fetch'
+
 class NoteFetch {
   async addNote(message: string): Promise<any> {
     try {
-      const response = await fetch(`${import.meta.env.PUBLIC_API_URL}/note`, {
+      const response = await fetch(`${API_BASE}/note`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -18,7 +20,7 @@ class NoteFetch {
 
   async removeNote(id: string): Promise<any> {
     try {
-      const response = await fetch(`${import.meta.env.PUBLIC_API_URL}/note/${id}`, {
+      const response = await fetch(`${API_BASE}/note/${id}`, {
         method: 'DELETE'
       })
       return response
@@ -29,7 +31,7 @@ class NoteFetch {
 
   async updateNote(id: string, message: string): Promise<any> {
     try {
-      const response = await fetch(`${import.meta.env.PUBLIC_API_URL}/note/${id}`, {
+      const response = await fetch(`${API_BASE}/note/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json'

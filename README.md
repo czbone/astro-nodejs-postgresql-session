@@ -51,9 +51,6 @@ pnpm db:seed
 ```env
 APP_TITLE=プロジェクトタイトル
 
-# Node.js サーバー設定
-PUBLIC_API_URL=http://localhost:3000/api
-
 # データベース設定
 DATABASE_URL="postgresql://myuser:mypassword@localhost:5432/my_prisma_postgres_app?schema=public"
 
@@ -75,7 +72,6 @@ SESSION_REDIS_URL=redis://localhost:6379/
 #### オプションの環境変数
 
 - `APP_TITLE`: アプリケーションタイトル（デフォルト: "プロジェクトタイトル"）
-- `PUBLIC_API_URL`: APIのベースURL
 
 #### セキュリティに関する注意
 

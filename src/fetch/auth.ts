@@ -1,7 +1,9 @@
+import { API_BASE } from '@/fetch'
+
 class AuthFetch {
   async login(email: string, password: string): Promise<any> {
     try {
-      const response = await fetch(`${import.meta.env.PUBLIC_API_URL}/auth/login`, {
+      const response = await fetch(`${API_BASE}/auth/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -18,7 +20,7 @@ class AuthFetch {
   }
   async logout(): Promise<any> {
     try {
-      const response = await fetch(`${import.meta.env.PUBLIC_API_URL}/auth/logout`, {
+      const response = await fetch(`${API_BASE}/auth/logout`, {
         method: 'POST'
       })
       return response

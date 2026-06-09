@@ -3,7 +3,6 @@
 
 interface ImportMetaEnv {
   readonly APP_TITLE: string
-  readonly PUBLIC_API_URL: string
 }
 declare namespace App {
   interface Locals {

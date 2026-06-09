@@ -1,5 +1,5 @@
 import { atom } from 'nanostores'
-import { NoteFetch } from '@/fetch'
+import { API_BASE, NoteFetch } from '@/fetch'
 
 type Note = {
   id: string
@@ -25,7 +25,7 @@ class NoteStore {
     NoteStore.init()
   }
   static async init() {
-    const response = await fetch(`${import.meta.env.PUBLIC_API_URL}/note`)
+    const response = await fetch(`${API_BASE}/note`)
     const data = await response.json()
     NoteStore.notes.set(data)
   }
