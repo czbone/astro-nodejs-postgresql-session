@@ -38,6 +38,7 @@
     "@tailwindcss/vite": "^4.3.0",
     "@types/cookie-signature": "^1.1.2",
     "@types/node": "^25.9.2",
+    "@types/pg": "^8.20.0",
     "@types/react": "^19.2.17",
     "@typescript-eslint/parser": "^8.60.1",
     "astro-eslint-parser": "^1.4.0",

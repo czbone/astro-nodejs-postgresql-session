@@ -33,6 +33,15 @@ pnpm db:push
 pnpm db:seed
 ```
 
+### 初期データ
+
+`pnpm db:seed` 実行後、以下のユーザでログインできます。
+
+| メール | 名前 | ロール | パスワード |
+| :----- | :--- | :----- | :--------- |
+| `admin@example.com` | 管理者 | `admin` | `password` |
+| `user@example.com` | 一般ユーザ | `user` | `password` |
+
 ## 環境変数の設定
 
 ### ローカル開発環境
