@@ -1,16 +1,4 @@
-﻿import { PrismaClient } from '@prisma/client'
-import { PrismaPg } from '@prisma/adapter-pg'
-import pg from 'pg'
-import 'dotenv/config'
-
-const connectionString = process.env.DATABASE_URL
-if (!connectionString) {
-  throw new Error('DATABASE_URL environment variable is not set')
-}
-
-const pool = new pg.Pool({ connectionString })
-const adapter = new PrismaPg(pool)
-const prisma = new PrismaClient({ adapter })
+﻿import { prisma } from '@/lib/prisma'
 
 async function main() {
   console.log('Starting seed...')
@@ -51,5 +39,4 @@ main()
   })
   .finally(async () => {
     await prisma.$disconnect()
-    await pool.end()
   })

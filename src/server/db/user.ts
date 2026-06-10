@@ -1,5 +1,5 @@
-import type { User } from '@prisma/client'
-import prisma from './prisma'
+import type { User } from '@/generated/prisma/client'
+import { prisma } from '@/lib/prisma'
 
 class UserDB {
   async getUserByEmail(email: string): Promise<User | null> {
