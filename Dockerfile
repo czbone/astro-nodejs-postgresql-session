@@ -66,8 +66,10 @@ COPY --chown=nodejs:nodejs prisma ./prisma
 COPY --chown=nodejs:nodejs prisma.config.ts ./
 
 # 起動スクリプトをコピー
-COPY --chown=nodejs:nodejs entrypoint.sh healthcheck.sh ./
-RUN chmod +x entrypoint.sh healthcheck.sh
+# COPY --chown=nodejs:nodejs entrypoint.sh healthcheck.sh ./
+# RUN chmod +x entrypoint.sh healthcheck.sh
+COPY --chown=nodejs:nodejs entrypoint.sh ./
+RUN chmod +x entrypoint.sh
 
 # 非rootユーザーに切り替え
 USER nodejs
@@ -76,8 +78,10 @@ USER nodejs
 # NOTE: EXPOSE / ENV PORT は Dockerfile に書かない（Coolify 設定と競合し docker ps が 3000-3001 になる）
 
 # ヘルスチェック（healthcheck.sh が実行時の PORT を参照）
-HEALTHCHECK --interval=30s --timeout=3s --start-period=90s --retries=3 \
-    CMD ./healthcheck.sh
+# HEALTHCHECK --interval=30s --timeout=3s --start-period=90s --retries=3 \
+#     CMD ./healthcheck.sh
+HEALTHCHECK --interval=30s --timeout=3s --start-period=40s --retries=3 \
+    CMD curl -sf -o /dev/null "http://localhost:$${PORT:-3000}/" || exit 1
 
 # 起動スクリプトを実行
 ENTRYPOINT ["./entrypoint.sh"]
