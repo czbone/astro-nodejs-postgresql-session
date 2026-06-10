@@ -81,7 +81,7 @@ USER nodejs
 # HEALTHCHECK --interval=30s --timeout=3s --start-period=90s --retries=3 \
 #     CMD ./healthcheck.sh
 HEALTHCHECK --interval=30s --timeout=3s --start-period=40s --retries=3 \
-    CMD curl -sf -o /dev/null "http://localhost:$${PORT:-3000}/" || exit 1
+    CMD curl -sf -o /dev/null "http://127.0.0.1:$${PORT:-3000}/" || exit 1
 
 # 起動スクリプトを実行
 ENTRYPOINT ["./entrypoint.sh"]
