@@ -1,4 +1,16 @@
-﻿import { prisma } from '@/lib/prisma'
+﻿import { PrismaClient } from '../src/generated/prisma/client'
+import { PrismaPg } from '@prisma/adapter-pg'
+import 'dotenv/config'
+
+const databaseUrl = process.env.DATABASE_URL
+
+if (!databaseUrl) {
+  throw new Error('DATABASE_URL is not set')
+}
+
+const prisma = new PrismaClient({
+  adapter: new PrismaPg(databaseUrl)
+})
 
 async function main() {
   console.log('Starting seed...')
