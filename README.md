@@ -72,9 +72,26 @@ SESSION_REDIS_URL=redis://localhost:6379/
 #### オプションの環境変数
 
 - `APP_TITLE`: アプリケーションタイトル（デフォルト: "プロジェクトタイトル"）
+- `SESSION_COOKIE_DOMAIN`: セッションクッキーのドメイン（サブドメイン間でセッションを共有する場合に設定。例: `.example.com`）
+- `SESSION_COOKIE_NAME`: セッションクッキー名（デフォルト: `__session`）
+- `SESSION_EXPIRES`: セッション有効期限（秒。デフォルト: `1800`）
+- `SESSION_ID_PREFIX`: Redisセッションキーのプレフィックス（デフォルト: `sess:`）
+
+#### サブドメイン間でのセッション共有
+
+複数のアプリをサブドメイン（例: `app1.example.com` と `app2.example.com`）で運用し、PostgreSQL と Redis を共有する場合、以下を両アプリで同一に設定すると、一方でログインすれば他方もログイン状態になります。
+
+- `SESSION_COOKIE_SECRET`
+- `SESSION_REDIS_URL`
+- `SESSION_COOKIE_NAME`
+- `SESSION_ID_PREFIX`
+- **`SESSION_COOKIE_DOMAIN`**（例: `.example.com`）
+
+`SESSION_COOKIE_DOMAIN` を未設定の場合、クッキーは各ホスト専用となり、サブドメイン間ではセッションは共有されません。
 
 #### セキュリティに関する注意
 
 - `SESSION_COOKIE_SECRET`は本番環境では**必ず**強力なランダム文字列（32文字以上推奨）に変更してください
 - デフォルト値（`secret`）は開発用途のみであり、本番環境では絶対に使用しないでください
 - パスワードやシークレットキーは`.env`ファイルに記載し、`.gitignore`でバージョン管理から除外してください
+- `SESSION_COOKIE_DOMAIN` を設定すると、その親ドメイン配下のすべてのサブドメインでクッキーが共有されます。信頼できないサブドメインを同一親ドメインで運用しないでください

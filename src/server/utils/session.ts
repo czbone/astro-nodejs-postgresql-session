@@ -20,10 +20,7 @@ class Session {
     if (result) {
       // セッションクッキーの有効期限更新
       context.cookies.set(config.SESSION_COOKIE_NAME, cookie, {
-        httpOnly: true,
-        path: '/',
-        sameSite: 'strict',
-        secure: import.meta.env.PROD,
+        ..._cookieOptions(),
         maxAge: config.SESSION_EXPIRES
       })
 
@@ -45,10 +42,7 @@ class Session {
 
     // クッキー作成
     context.cookies.set(config.SESSION_COOKIE_NAME, signedSessionId, {
-      httpOnly: true,
-      path: '/',
-      sameSite: 'strict',
-      secure: import.meta.env.PROD,
+      ..._cookieOptions(),
       maxAge: config.SESSION_EXPIRES
     })
 
@@ -77,14 +71,19 @@ class Session {
     }
 
     // クッキー削除
-    context.cookies.delete(config.SESSION_COOKIE_NAME, {
-      httpOnly: true,
-      path: '/',
-      sameSite: 'strict',
-      secure: import.meta.env.PROD
-    })
+    context.cookies.delete(config.SESSION_COOKIE_NAME, _cookieOptions())
 
     return true
+  }
+}
+
+function _cookieOptions() {
+  return {
+    httpOnly: true,
+    path: '/',
+    sameSite: 'strict' as const,
+    secure: import.meta.env.PROD,
+    ...(config.SESSION_COOKIE_DOMAIN ? { domain: config.SESSION_COOKIE_DOMAIN } : {})
   }
 }
 
