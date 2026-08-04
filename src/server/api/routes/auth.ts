@@ -1,24 +1,20 @@
 import { Hono } from 'hono'
-import type { APIContext } from 'astro'
+import { getFetchState } from 'astro/hono'
 import { verify } from '@/server/utils/password'
 import Session from '@/server/utils/session'
 import { UserDB } from '@/server/db'
 import type { UserSessionData } from '@/types/user'
 import { convertToUserSessionData } from '@/types/user'
 
-type Env = { Bindings: { astro: APIContext } }
-
-const auth = new Hono<Env>()
+const auth = new Hono()
 
 auth.post('/login', async (c) => {
-  const { request } = c.env.astro
-
-  if (request.headers.get('Content-Type') !== 'application/json') {
+  if (c.req.header('Content-Type') !== 'application/json') {
     return c.json({ message: 'Request format error' }, 400)
   }
 
   try {
-    const body = await request.json()
+    const body = await c.req.json()
     const email = body.email
     const password = body.password
 
@@ -37,7 +33,7 @@ auth.post('/login', async (c) => {
     }
 
     const sessionData: UserSessionData = convertToUserSessionData(userWithPassword)
-    await Session.createUser(c.env.astro, sessionData)
+    await Session.createUser(getFetchState(c), sessionData)
 
     return c.json({ message: 'Login succeeded' }, 200)
   } catch (err) {
@@ -48,7 +44,7 @@ auth.post('/login', async (c) => {
 
 auth.post('/logout', async (c) => {
   try {
-    await Session.deleteUser(c.env.astro)
+    await Session.deleteUser(getFetchState(c))
     return c.json({ message: 'Logout succeeded' }, 200)
   } catch {
     return c.json({ message: 'Logout failed' }, 500)

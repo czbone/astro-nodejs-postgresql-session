@@ -1,12 +1,17 @@
-import type { APIContext } from 'astro'
+import type { AstroCookies } from 'astro'
 import cookieSignature from 'cookie-signature'
 import { v4 as uuidv4 } from 'uuid'
 import config from '@/server/config'
 import type { UserSessionData } from '@/types/user'
 
+type SessionContext = {
+  cookies: AstroCookies
+  locals: App.Locals
+}
+
 class Session {
   // セッション情報(ユーザ情報)を取得
-  async getUser(context: APIContext): Promise<UserSessionData | null> {
+  async getUser(context: SessionContext): Promise<UserSessionData | null> {
     // クッキー取得
     const cookie = context.cookies.get(config.SESSION_COOKIE_NAME)?.value
     if (!cookie) return null
@@ -32,7 +37,7 @@ class Session {
       return null
     }
   }
-  async createUser(context: APIContext, user: UserSessionData): Promise<UserSessionData | null> {
+  async createUser(context: SessionContext, user: UserSessionData): Promise<UserSessionData | null> {
     // セッションID作成
     const sessionId = uuidv4()
     const signedSessionId = _sign(sessionId, config.SESSION_COOKIE_SECRET)
@@ -58,7 +63,7 @@ class Session {
   }
 
   // セッション情報を削除
-  async deleteUser(context: APIContext): Promise<boolean> {
+  async deleteUser(context: SessionContext): Promise<boolean> {
     // クッキー取得
     const cookie = context.cookies.get(config.SESSION_COOKIE_NAME)?.value
     if (!cookie) return false
