@@ -1,6 +1,6 @@
 import eslint from '@eslint/js'
 import typescriptParser from '@typescript-eslint/parser'
-import astroEslintParser from 'astro-eslint-parser'
+import * as astroEslintParser from 'astro-eslint-parser'
 import eslintConfigPrettier from 'eslint-config-prettier'
 import eslintPluginAstro from 'eslint-plugin-astro'
 // import pluginReact from 'eslint-plugin-react'
