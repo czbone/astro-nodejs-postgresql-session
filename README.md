@@ -5,15 +5,16 @@ Astro 7 ベースで `PostgreSQL` と `Redis` を使用したユーザ認証機�
 
 ## アーキテクチャ
 
-リクエストは `src/fetch.ts` の Hono アプリが受け取り、次の順で処理します。
+リクエストは `src/fetch.ts` が受け取り、次の順で処理します。
 
 1. `middleware()`（`astro/hono`）— `src/middleware` の認証・Redis セッション注入
 2. `/api/*` — Hono ルート（`src/server/api`）
 3. `pages()`（`astro/hono`）— `.astro` ページ描画
+4. `App.getSetCookieFromResponse()` — セッション Cookie を `Set-Cookie` ヘッダへ反映（Node アダプタ本番用）
 
 | パス | 役割 |
 | :--- | :--- |
-| `src/fetch.ts` | Advanced routing エントリ（Hono + `astro/hono`） |
+| `src/fetch.ts` | Advanced routing エントリ（Hono + Cookie ヘッダ付与） |
 | `src/middleware/` | 認証ガード、Redis セッションの `locals` 注入 |
 | `src/server/api/` | API ルート（auth / note） |
 | `src/server/utils/` | セッション、Redis、パスワード検証 |
