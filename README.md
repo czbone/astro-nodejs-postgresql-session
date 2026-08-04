@@ -1,7 +1,36 @@
 # Astroベースのユーザ認証機能サンプル
 
-Astroベースで`PostgreSQL`と`Redis`を使用したユーザ認証機能のサンプルプロジェクト。
-フロントエンドがReact、Tailwind、Flowbite。
+Astro 7 ベースで `PostgreSQL` と `Redis` を使用したユーザ認証機能のサンプルプロジェクト。  
+フロントエンドは React、Tailwind CSS、Flowbite。API は Hono で実装し、Astro の [Advanced routing](https://docs.astro.build/en/guides/routing/#advanced-routing) に準拠しています。
+
+## アーキテクチャ
+
+リクエストは `src/fetch.ts` の Hono アプリが受け取り、次の順で処理します。
+
+1. `middleware()`（`astro/hono`）— `src/middleware` の認証・Redis セッション注入
+2. `/api/*` — Hono ルート（`src/server/api`）
+3. `pages()`（`astro/hono`）— `.astro` ページ描画
+
+| パス | 役割 |
+| :--- | :--- |
+| `src/fetch.ts` | Advanced routing エントリ（Hono + `astro/hono`） |
+| `src/middleware/` | 認証ガード、Redis セッションの `locals` 注入 |
+| `src/server/api/` | API ルート（auth / note） |
+| `src/server/utils/` | セッション、Redis、パスワード検証 |
+| `src/server/db/` | Prisma 経由のデータアクセス |
+| `src/api-client/` | ブラウザ側の API 呼び出しラッパー |
+| `src/pages/` | ページ（`index` / `protected` / `about`） |
+
+### API
+
+| メソッド | パス | 説明 | 認証 |
+| :------- | :--- | :--- | :--- |
+| `POST` | `/api/auth/login` | ログイン（セッション作成） | 不要 |
+| `POST` | `/api/auth/logout` | ログアウト（セッション削除） | 不要 |
+| `GET` / `POST` | `/api/note` | ノート一覧 / 追加 | 必要 |
+| `PUT` / `DELETE` | `/api/note/:id` | ノート更新 / 削除 | 必要 |
+
+未認証で保護対象の `/api/*` にアクセスすると `401`、ページは `/` へリダイレクトします。
 
 ## コマンド
 
@@ -13,6 +42,7 @@ Astroベースで`PostgreSQL`と`Redis`を使用したユーザ認証機能の�
 | `pnpm dev`      | ローカル開発サーバーを `localhost:3000` で起動 |
 | `pnpm build`    | 本番サイトを `./dist/` にビルド        |
 | `pnpm preview`  | デプロイ前にローカルでビルドをプレビュー |
+| `pnpm start`    | ビルド済みサーバーを起動（`dist/server/entry.mjs`） |
 | `pnpm db:generate` | Prismaクライアントを生成 |
 | `pnpm db:push`  | Prismaスキーマをデータベースにプッシュ |
 | `pnpm db:seed`  | 初期データでデータベースをシード        |
