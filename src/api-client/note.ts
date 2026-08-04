@@ -1,4 +1,4 @@
-import { API_BASE } from '@/fetch'
+import { API_BASE } from '@/api-client'
 
 class NoteFetch {
   async addNote(message: string): Promise<any> {

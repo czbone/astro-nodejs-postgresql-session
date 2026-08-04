@@ -9,9 +9,6 @@ export default defineConfig({
   adapter: node({
     mode: 'standalone'
   }),
-  // Astro 7 は src/fetch を advanced routing 用に予約する。
-  // 本プロジェクトの src/fetch/ はクライアント API 用のため無効化する。
-  fetchFile: null,
   server: {
     port: 3000,
     host: true /* ホスティング時必須 */

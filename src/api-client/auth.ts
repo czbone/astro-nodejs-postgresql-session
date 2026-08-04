@@ -1,4 +1,4 @@
-import { API_BASE } from '@/fetch'
+import { API_BASE } from '@/api-client'
 
 class AuthFetch {
   async login(email: string, password: string): Promise<any> {

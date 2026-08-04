@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import AuthFetch from '@/fetch/auth.ts'
+import AuthFetch from '@/api-client/auth.ts'
 
 export default function Login() {
   const [email, setEmail] = useState('')

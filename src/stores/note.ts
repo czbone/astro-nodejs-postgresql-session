@@ -1,5 +1,5 @@
 import { atom } from 'nanostores'
-import { API_BASE, NoteFetch } from '@/fetch'
+import { API_BASE, NoteFetch } from '@/api-client'
 
 type Note = {
   id: string
