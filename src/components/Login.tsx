@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, type FormEvent } from 'react'
 import AuthFetch from '@/api-client/auth.ts'
 
 export default function Login() {
@@ -6,7 +6,7 @@ export default function Login() {
   const [password, setPassword] = useState('')
   const [isVisible, setIsVisible] = useState(false)
 
-  const handleLogin = async (e) => {
+  const handleLogin = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     const response = await AuthFetch.login(email, password)
     if (response) {
@@ -15,7 +15,6 @@ export default function Login() {
         window.location.href = '/'
       } else {
         setIsVisible(true)
-        return false
       }
     } else {
       alert('エラーが発生しました')

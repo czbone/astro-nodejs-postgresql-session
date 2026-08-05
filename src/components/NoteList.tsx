@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, type KeyboardEvent } from 'react'
 import { useStore } from '@nanostores/react'
 import { Modal } from 'flowbite'
 import { NoteStore } from '../stores'
@@ -7,26 +7,26 @@ export default function NoteList() {
   const $notes = useStore(NoteStore.notes)
   const [newNote, setNewNote] = useState('')
   const [modalNote, setModalNote] = useState('')
-  const [editId, setEditId] = useState(null)
-  const modalRef = useRef(null)
-  const modalInstanceRef = useRef(null)
+  const [editId, setEditId] = useState<string | null>(null)
+  const modalRef = useRef<HTMLDivElement>(null)
+  const modalInstanceRef = useRef<Modal | null>(null)
 
   // 初期データロード
   useEffect(() => {
-    NoteStore.init()
+    void NoteStore.init()
   }, [])
 
   // モーダルの初期化
   useEffect(() => {
     if (modalRef.current && !modalInstanceRef.current) {
       const options = {
-        backdrop: 'static'
+        backdrop: 'static' as const
       }
       modalInstanceRef.current = new Modal(modalRef.current, options)
     }
   }, [])
 
-  const handleEditNote = (id) => {
+  const handleEditNote = (id: string) => {
     const noteRecord = NoteStore.get(id)
     if (noteRecord) {
       setModalNote(noteRecord.message)
@@ -39,22 +39,22 @@ export default function NoteList() {
 
   const handleAddNote = () => {
     if (newNote.trim()) {
-      NoteStore.add(newNote)
+      void NoteStore.add(newNote)
       setNewNote('')
     }
   }
 
   const handleUpdateNote = () => {
     if (modalNote.trim() && editId) {
-      NoteStore.update(editId, modalNote)
+      void NoteStore.update(editId, modalNote)
     }
     if (modalInstanceRef.current) {
       modalInstanceRef.current.hide()
     }
   }
 
-  const handleRemoveNote = (id) => {
-    NoteStore.remove(id)
+  const handleRemoveNote = (id: string) => {
+    void NoteStore.remove(id)
   }
 
   const handleCloseModal = () => {
@@ -63,7 +63,7 @@ export default function NoteList() {
     }
   }
 
-  const handleKeyEnter = (e, callback) => {
+  const handleKeyEnter = (e: KeyboardEvent<HTMLInputElement>, callback: () => void) => {
     if (e.key === 'Enter') {
       callback()
     }
@@ -73,9 +73,9 @@ export default function NoteList() {
     <div>
       <h2 className="text-3xl my-4">メモリスト</h2>
       <ul>
-        {$notes.map((note, index) => (
+        {$notes.map((note) => (
           <li
-            key={index}
+            key={note.id}
             className="flex justify-between px-3 py-1 bg-white items-center gap-1 rounded-lg border border-gray-300 my-3 h-16"
           >
             <span>{note.message}</span>
@@ -116,7 +116,7 @@ export default function NoteList() {
         <input
           value={newNote}
           onChange={(e) => setNewNote(e.target.value)}
-          onKeyPress={(e) => handleKeyEnter(e, handleAddNote)}
+          onKeyDown={(e) => handleKeyEnter(e, handleAddNote)}
           type="text"
           className="rounded-lg w-5/6 border border-gray-400 p-2"
           placeholder="メモを入力"
@@ -133,7 +133,7 @@ export default function NoteList() {
       <div
         ref={modalRef}
         id="defaultModal"
-        tabIndex="-1"
+        tabIndex={-1}
         aria-hidden="true"
         className="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-modal md:h-full"
       >
@@ -169,7 +169,7 @@ export default function NoteList() {
               <input
                 value={modalNote}
                 onChange={(e) => setModalNote(e.target.value)}
-                onKeyPress={(e) => handleKeyEnter(e, handleUpdateNote)}
+                onKeyDown={(e) => handleKeyEnter(e, handleUpdateNote)}
                 type="text"
                 className="rounded-lg w-full border border-gray-400 p-2"
                 placeholder="メモを入力"

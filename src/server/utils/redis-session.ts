@@ -1,104 +1,69 @@
-interface Options {
-  prefix?: string
-  scanCount?: number
-  serializer?: any
-  client: any
+import type Redis from 'ioredis'
+import type { UserSessionData } from '@/types/user'
+
+export type SessionRecord = {
+  user: UserSessionData
+  cookie?: {
+    expires?: Date | string
+  }
+}
+
+type Options = {
+  client: Redis
   ttl?: number
-  disableTTL?: boolean
-  disableTouch?: boolean
 }
 
 class RedisSession {
-  prefix: string
-  scanCount: number
-  serializer: any
-  client: any
-  ttl: number
-  disableTTL: boolean
-  disableTouch: boolean
+  private client: Redis
+  private ttl: number
 
   constructor(options: Options) {
-    this.prefix = ''
-    this.scanCount = Number(options.scanCount) || 100
-    this.serializer = options.serializer || JSON
     this.client = options.client
-    this.ttl = options.ttl || 1800 // 30 minutes
-    this.disableTTL = options.disableTTL || false
-    this.disableTouch = options.disableTouch || false
+    this.ttl = options.ttl ?? 1800
   }
 
-  async get(sid: string) {
-    const key = this.prefix + sid
-
-    const data = await this.client.get(key)
+  async get(sid: string): Promise<SessionRecord | null> {
+    const data = await this.client.get(sid)
     if (!data) return null
 
-    let value
     try {
-      value = this.serializer.parse(data)
-    } catch (err) {
+      return JSON.parse(data) as SessionRecord
+    } catch {
       return null
     }
-    return value
   }
 
-  async set(sid: string, sess: any) {
-    const args = [this.prefix + sid]
-
-    let value
+  async set(sid: string, sess: SessionRecord): Promise<'OK' | null> {
+    let value: string
     try {
-      value = this.serializer.stringify(sess)
-    } catch (er) {
+      value = JSON.stringify(sess)
+    } catch {
       return null
     }
-    args.push(value)
 
-    let ttl = 1
-    if (!this.disableTTL) {
-      ttl = this._getTTL(sess)
-      args.push('EX', ttl.toString())
-    }
-
+    const ttl = this.getTTL(sess)
     if (ttl > 0) {
-      return await this.client.set(args)
-    } else {
-      // If the resulting TTL is negative we can delete / destroy the key
-      return await this.destroy(sid)
+      return await this.client.set(sid, value, 'EX', ttl)
     }
+
+    await this.destroy(sid)
+    return null
   }
 
-  async touch(sid: string, sess?: unknown) {
-    if (this.disableTouch || this.disableTTL) return null
-
-    const key = this.prefix + sid
-    const err = await this.client.expire(key, this._getTTL(sess))
-    return err
+  async touch(sid: string, sess?: SessionRecord): Promise<number> {
+    return await this.client.expire(sid, this.getTTL(sess))
   }
 
-  async destroy(sid: string) {
-    const key = this.prefix + sid
-    const err = await this.client.del(key)
-    return err
+  async destroy(sid: string): Promise<number> {
+    return await this.client.del(sid)
   }
 
-  async clear() {
-    const keys: string[] = await this.client.keys(this.prefix + '*')
-    if (!keys) return
-
-    keys.forEach(async (key) => {
-      await this.client.del(key)
-    })
-  }
-
-  _getTTL(sess?: any) {
-    let ttl
-    if (sess && sess.cookie && sess.cookie.expires) {
+  private getTTL(sess?: SessionRecord): number {
+    if (sess?.cookie?.expires) {
       const ms = Number(new Date(sess.cookie.expires)) - Date.now()
-      ttl = Math.ceil(ms / 1000)
-    } else {
-      ttl = this.ttl
+      return Math.ceil(ms / 1000)
     }
-    return ttl
+    return this.ttl
   }
 }
 

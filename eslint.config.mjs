@@ -3,6 +3,7 @@ import typescriptParser from '@typescript-eslint/parser'
 import * as astroEslintParser from 'astro-eslint-parser'
 import eslintConfigPrettier from 'eslint-config-prettier'
 import eslintPluginAstro from 'eslint-plugin-astro'
+// ESLint 10 未対応のため一時無効（eslint-plugin-react@7）
 // import pluginReact from 'eslint-plugin-react'
 // import pluginReactHooks from 'eslint-plugin-react-hooks'
 import globals from 'globals'

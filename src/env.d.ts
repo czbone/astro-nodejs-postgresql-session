@@ -6,7 +6,7 @@ interface ImportMetaEnv {
 }
 declare namespace App {
   interface Locals {
-    session: RedisSession
-    user: UserSessionData
+    session: import('./server/utils/redis-session').default
+    user: import('./types/user').UserSessionData
   }
 }

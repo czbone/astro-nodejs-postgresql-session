@@ -20,9 +20,7 @@ export const auth = defineMiddleware(async (context, next) => {
 
     // ルートの場合はprotectedページに遷移
     if (context.url.pathname === INDEX_PATH) {
-      //return Response.redirect(new URL('/protected', context.url), 302)
-      //return Response.redirect(new URL('/protected', context.url)) // Response.redirectのデフォルトのレスポンスコードは302 ⇒ エラー発生
-      return context.redirect('/protected') // OK
+      return context.redirect('/protected')
     } else {
       return next()
     }
@@ -37,7 +35,7 @@ export const auth = defineMiddleware(async (context, next) => {
       })
     } else {
       // それ以外はルートにリダイレクト
-      return Response.redirect(new URL('/', context.url))
+      return context.redirect('/')
     }
   }
 })

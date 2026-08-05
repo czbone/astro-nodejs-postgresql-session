@@ -1,6 +1,6 @@
 import type { AstroCookies } from 'astro'
 import cookieSignature from 'cookie-signature'
-import { v4 as uuidv4 } from 'uuid'
+import { randomUUID } from 'node:crypto'
 import config from '@/server/config'
 import type { UserSessionData } from '@/types/user'
 
@@ -39,7 +39,7 @@ class Session {
   }
   async createUser(context: SessionContext, user: UserSessionData): Promise<UserSessionData | null> {
     // セッションID作成
-    const sessionId = uuidv4()
+    const sessionId = randomUUID()
     const signedSessionId = _sign(sessionId, config.SESSION_COOKIE_SECRET)
 
     // セッション有効期限を計算
