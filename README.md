@@ -73,6 +73,31 @@ pnpm db:seed
 | `admin@example.com` | 管理者 | `admin` | `password` |
 | `user@example.com` | 一般ユーザ | `user` | `password` |
 
+## 起動
+
+前提: PostgreSQL / Redis が起動済みで、後述の「環境変数の設定」どおり `.env` があること。
+
+### 開発
+
+```bash
+pnpm dev
+```
+
+ブラウザで `http://localhost:3000` を開く。
+
+### 本番相当（ビルドして起動）
+
+`pnpm build` の前に Prisma クライアント生成（`pnpm db:generate`）が必要です。準備で未実行の場合は先に実行してください。
+
+```bash
+pnpm db:generate
+pnpm build
+pnpm start
+```
+
+ビルド成果物は `./dist/`。`pnpm start` は `dist/server/entry.mjs` を起動する。  
+デプロイ前の確認だけなら `pnpm preview` でも可。
+
 ## 環境変数の設定
 
 ### ローカル開発環境
